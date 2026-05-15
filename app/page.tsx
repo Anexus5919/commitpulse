@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 import { CommitPulseLogo } from '@/components/commitpulse-logo';
 import { CustomizeCTA } from './components/CustomizeCTA';
@@ -118,13 +119,25 @@ export default function LandingPage() {
         <section className="mx-auto mb-32 max-w-4xl">
           <div className="rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#0a0a0a] p-4 md:p-8">
             <div className="mb-8 flex flex-col gap-4 md:flex-row">
-              <input
-                type="text"
-                placeholder="Enter GitHub Username"
-                className="flex-1 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111] px-5 py-3.5 text-sm text-white outline-none transition-all placeholder:text-[#A1A1AA] focus:border-[rgba(255,255,255,0.18)]"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
+              <div className="relative flex-1 flex items-center">
+                <input
+                  type="text"
+                  placeholder="Enter GitHub Username"
+                  className="flex-1 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111] px-5 py-3.5 text-sm text-white outline-none transition-all placeholder:text-[#A1A1AA] focus:border-[rgba(255,255,255,0.18)]"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                {username.length > 0 ? (
+                  <button
+                    onClick={() => setUsername('')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A1A1AA] transition-colors hover:text-white"
+                    aria-label="Clear input"
+                    type="button"
+                  >
+                    <X size={18} />
+                  </button>
+                ) : null}
+              </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={copyToClipboard}

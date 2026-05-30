@@ -220,6 +220,26 @@ describe('generateSVG', () => {
     expect(svg).toContain('ffffff'); // default text
   });
 
+  it('adjusts label styling contrast on light backgrounds versus dark backgrounds', () => {
+    // 1. Light background (bg: 'ffffff') should use text color for label fill and 0.8 opacity
+    const svgLight = generateSVG(
+      mockStats,
+      { user: 'avi', bg: 'ffffff', text: '24292f', accent: '0969da' } as unknown as BadgeParams,
+      mockCalendar
+    );
+    expect(svgLight).toContain('.label { font-family: "Roboto", sans-serif; fill: #24292f;');
+    expect(svgLight).toContain('opacity: 0.8;');
+
+    // 2. Dark background (bg: '0d1117') should use accent color for label fill and 0.7 opacity
+    const svgDark = generateSVG(
+      mockStats,
+      { user: 'avi', bg: '0d1117', text: 'ffffff', accent: '58a6ff' } as unknown as BadgeParams,
+      mockCalendar
+    );
+    expect(svgDark).toContain('.label { font-family: "Roboto", sans-serif; fill: #58a6ff;');
+    expect(svgDark).toContain('opacity: 0.7;');
+  });
+
   it('falls back to default typography for completely invalid font names', () => {
     const svg = generateSVG(
       mockStats,

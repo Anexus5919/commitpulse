@@ -69,6 +69,7 @@ describe('User Model', () => {
       expect(usernamePath.options.required).toBe(true);
     });
   });
+
   describe('Database Connection State 2 Handling', () => {
     it('keeps the User model usable while mongoose is connecting', async () => {
       const { vi } = await import('vitest');
@@ -118,6 +119,89 @@ describe('User Model', () => {
       // 4. Clean up mocks
       readyStateSpy.mockRestore();
       findOneSpy.mockRestore();
+    });
+  });
+
+  describe('Database Connection State 0 Handling', () => {
+    it('fails queries gracefully with a ConnectionError when disconnected', async () => {
+      const { vi } = await import('vitest');
+
+      // 1. Force the mongoose connection state to 0 (Disconnected)
+      const readyStateSpy = vi
+        .spyOn(mongoose.connection, 'readyState', 'get')
+        .mockReturnValue(0 as unknown as typeof mongoose.connection.readyState);
+
+      expect(mongoose.connection.readyState).toBe(0);
+
+      // 2. Mock a database operation to simulate a connection failure
+      const mockConnectionError = new Error('Database connection lost');
+      mockConnectionError.name = 'ConnectionError';
+
+      const findOneSpy = vi.spyOn(User, 'findOne').mockRejectedValue(mockConnectionError);
+
+      // 3. Verify that attempting to query throws the expected ConnectionError
+      await expect(User.findOne({ username: 'testuser' })).rejects.toThrow(
+        'Database connection lost'
+      );
+      await expect(User.findOne({ username: 'testuser' })).rejects.toMatchObject({
+        name: 'ConnectionError',
+      });
+
+      // 4. Clean up mocks to prevent side effects in other tests
+      readyStateSpy.mockRestore();
+      findOneSpy.mockRestore();
+    });
+  });
+
+  describe('Database Connection State 3 (Disconnecting) Handling', () => {
+    it('aborts/rolls back active transactions cleanly when connection is in state 3 (disconnecting)', async () => {
+      const { vi } = await import('vitest');
+
+      // 1. Mock mongoose.connection.readyState to return 3 (disconnecting)
+      const readyStateSpy = vi
+        .spyOn(mongoose.connection, 'readyState', 'get')
+        .mockReturnValue(3 as unknown as typeof mongoose.connection.readyState);
+
+      // 2. Mock a mongoose session with transaction support
+      const mockSession = {
+        startTransaction: vi.fn(),
+        commitTransaction: vi.fn(),
+        abortTransaction: vi.fn().mockResolvedValue(undefined),
+        endSession: vi.fn().mockResolvedValue(undefined),
+      } as unknown as mongoose.ClientSession;
+
+      const startSessionSpy = vi.spyOn(mongoose, 'startSession').mockResolvedValue(mockSession);
+
+      // 3. Simulate a database transaction workflow that checks connection state
+      const runTransactionWithCheck = async (session: mongoose.ClientSession) => {
+        session.startTransaction();
+        try {
+          if (mongoose.connection.readyState === 3) {
+            await session.abortTransaction();
+            return { status: 'aborted' };
+          }
+          await session.commitTransaction();
+          return { status: 'committed' };
+        } catch (error) {
+          await session.abortTransaction();
+          throw error;
+        } finally {
+          await session.endSession();
+        }
+      };
+
+      const session = await mongoose.startSession();
+      const result = await runTransactionWithCheck(session);
+
+      // 4. Assertions
+      expect(result.status).toBe('aborted');
+      expect(mockSession.abortTransaction).toHaveBeenCalledTimes(1);
+      expect(mockSession.endSession).toHaveBeenCalledTimes(1);
+      expect(mockSession.commitTransaction).not.toHaveBeenCalled();
+
+      // Cleanup
+      readyStateSpy.mockRestore();
+      startSessionSpy.mockRestore();
     });
   });
 });

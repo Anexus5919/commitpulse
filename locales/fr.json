@@ -15,7 +15,7 @@
     "copyright": "© {{year}} CommitPulse. Tous droits réservés."
   },
   "landing": {
-    "title": "Sublimez Votre\nHistoire de Contributions.",
+    "title": "Sublimez Votre\nHistoire de {Contributions}.",
     "subtitle": "Ne vous contentez plus de grilles plates. Générez des monolithes 3D isométriques haute fidélité qui visualisent votre rythme de codage avec une précision professionnelle.",
     "watch_dashboard": "Voir le tableau de bord",
     "discord_community": "Rejoindre la communauté sur Discord",

@@ -15,7 +15,7 @@
     "copyright": "© {{year}} CommitPulse. All rights reserved."
   },
   "landing": {
-    "title": "기여 내역을\n더 돋보이게.",
+    "title": "{기여} 내역을\n더 돋보이게.",
     "subtitle": "평면 그리드에 만족하지 마세요. 코딩 리듬을 전문적인 정밀도로 시각화해주는 고해상도 3D 등각 모놀리스를 생성하세요.",
     "watch_dashboard": "대시보드 보기",
     "discord_community": "Discord 커뮤니티 참여하기",

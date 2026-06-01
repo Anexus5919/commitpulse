@@ -117,8 +117,11 @@ describe('LandingPage', () => {
 
   it('renders the main heading', () => {
     render(<LandingPage />);
-    expect(screen.getByText(/Elevate Your/i)).toBeDefined();
-    expect(screen.getByText(/Contribution Story/i)).toBeDefined();
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toBeDefined();
+    expect(heading.textContent).toContain('Elevate Your');
+    expect(heading.textContent).toContain('Contribution');
+    expect(heading.textContent).toContain('Story');
   });
 
   it('renders the input field empty by default', () => {

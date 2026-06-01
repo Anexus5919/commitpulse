@@ -17,7 +17,7 @@
   "landing": {
     "empty_username_warning": "Ingresa un usuario de GitHub para copiar el enlace de tu insignia.",
     "max_length_warning": "Límite de usuario de GitHub alcanzado (máximo 39 caracteres)",
-    "title": "Eleva tu historia\nde contribuciones.",
+    "title": "Eleva tu historia\nde {contribuciones}.",
     "subtitle": "No te conformes con cuadrículas planas. Genera monolitos 3D isométricos de alta fidelidad que visualizan tu ritmo de programación con precisión profesional.",
     "watch_dashboard": "Ver panel",
     "discord_community": "Únete a la comunidad en Discord",

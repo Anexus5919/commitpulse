@@ -15,7 +15,7 @@
     "copyright": "© {{year}} CommitPulse. 保留所有权利。"
   },
   "landing": {
-    "title": "提升您的\n贡献故事。",
+    "title": "提升您的\n{贡献}故事。",
     "subtitle": "别再满足于扁平的网格。生成高保真的 3D 等距柱状图，以专业的精度可视化您的编码节奏。",
     "watch_dashboard": "查看仪表盘",
     "discord_community": "加入 Discord 社区",

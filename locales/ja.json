@@ -15,7 +15,7 @@
     "copyright": "© {{year}} CommitPulse. All rights reserved."
   },
   "landing": {
-    "title": "あなたの開発の軌跡を\n立体的に表現する。",
+    "title": "あなたの{開発の軌跡}を\n立体的に表現する。",
     "subtitle": "平面的なグリッドだけで満足していませんか？ あなたのコーディングのリズムをプロフェッショナルな精度で可視化する、高精度な3Dアイソメトリックモノリスを作成しましょう。",
     "watch_dashboard": "ダッシュボードを見る",
     "discord_community": "Discordコミュニティに参加する",

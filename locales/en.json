@@ -17,7 +17,7 @@
   "landing": {
     "empty_username_warning": "Please enter a GitHub username to copy your badge link.",
     "max_length_warning": "GitHub username limit reached (39 characters maximum)",
-    "title": "Elevate Your\nContribution Story.",
+    "title": "Elevate Your\n{Contribution} Story.",
     "subtitle": "Stop settling for flat grids. Generate high-fidelity, 3D isometric monoliths that visualize your coding rhythm with professional precision.",
     "watch_dashboard": "Watch Dashboard",
     "discord_community": "Join the community on Discord",

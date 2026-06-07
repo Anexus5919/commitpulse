@@ -108,7 +108,8 @@ describe('HistoricalTrendView - Empty & Missing Input Fallbacks', () => {
 
     expect(screen.getByText('Contributions')).toBeInTheDocument();
     expect(screen.getByText('Active Days')).toBeInTheDocument();
-    expect(screen.getByText('Current Streak')).toBeInTheDocument();
+    // The streak card label is Current/Ending/Upcoming depending on where the window sits vs today.
+    expect(screen.getByText(/(Current|Ending|Upcoming) Streak/)).toBeInTheDocument();
     expect(screen.getByText('Longest Streak')).toBeInTheDocument();
   });
 

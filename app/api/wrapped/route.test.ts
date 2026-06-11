@@ -30,6 +30,7 @@ const mockWrappedStats: WrappedStats = {
   busiestMonth: '2025-11',
   weekendRatio: 24,
   topLanguage: 'TypeScript',
+  calendar: mockCalendar,
 };
 
 function makeRequest(params: Record<string, string> = {}): Request {
@@ -213,6 +214,23 @@ describe('GET /api/wrapped', () => {
       expect(response.status).toBe(429);
       const body = await response.text();
       expect(body).toContain('RATE LIMITED');
+    });
+  });
+
+  describe('speed parameter', () => {
+    it('preserves an in-range decimal speed like "8.5s" instead of forcing it to an integer', async () => {
+      const response = await GET(makeRequest({ user: 'octocat', speed: '8.5s' }));
+      const body = await response.text();
+      expect(body).toContain('8.5s');
+    });
+
+    it('falls back to 8s when the speed is out of range or malformed', async () => {
+      for (const speed of ['1s', '999s', 'fast', '5']) {
+        const response = await GET(makeRequest({ user: 'octocat', speed }));
+        const body = await response.text();
+        expect(body).toContain('--scan-speed: 8s');
+        expect(body).not.toContain(speed === 'fast' ? 'fast' : `--scan-speed: ${speed}`);
+      }
     });
   });
 });

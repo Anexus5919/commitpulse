@@ -376,6 +376,9 @@ const baseStreakParamsSchema = z.object({
       'languages',
       'constellation',
       'radar',
+      'doughnut',
+      'pie',
+      'activity_graph',
     ])
     .catch('default')
     .default('default'),
@@ -451,7 +454,10 @@ const baseStreakParamsSchema = z.object({
   // Glow effect — on by default. Accepts 'true'/'1' (true) or 'false' (false).
   glow: z.string().optional().transform(toGlowFlag).default(true),
   opacity: z.string().optional().transform(toOpacityValue),
-  entrance: z.enum(['rise', 'fade', 'slide', 'none']).catch('rise').default('rise'),
+  entrance: z
+    .enum(['rise', 'fade', 'slide', 'wave', 'bounce', 'none'])
+    .catch('rise')
+    .default('rise'),
   badges: z.string().optional().transform(toBooleanFlag).default(false),
 
   // Output format: 'svg' (default), 'json', or 'png' for image export.
@@ -496,6 +502,23 @@ const baseStreakParamsSchema = z.object({
       { message: 'Invalid layout format. Supported values: default, compact, full.' }
     )
     .transform((val) => (!val ? undefined : val)),
+
+  // border parameter: optional hex color for SVG badge border stroke
+  border: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (val === undefined || val === '') return true;
+        const cleanVal = val.replace(/^#/, '');
+        return /^[0-9a-fA-F]{3,4}$|^[0-9a-fA-F]{6,8}$/.test(cleanVal);
+      },
+      { message: 'border must be a valid hex color (with or without #)' }
+    )
+    .transform((val) => {
+      if (!val) return undefined;
+      return sanitizeHexColor(val, '58a6ff');
+    }),
 });
 
 export const streakParamsSchema = baseStreakParamsSchema.refine(

@@ -29,18 +29,20 @@ vi.mock('framer-motion', () => ({
         </div>
       );
     },
-    span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
+    span: ({ children, ...props }: Record<string, unknown>) => (
+      <span {...props}>{children as React.ReactNode}</span>
+    ),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Mock lucide-react
 vi.mock('lucide-react', () => ({
-  Play: (props: any) => <div data-testid="icon-play" {...props} />,
-  Pause: (props: any) => <div data-testid="icon-pause" {...props} />,
-  RotateCcw: (props: any) => <div data-testid="icon-rotate" {...props} />,
-  Calendar: (props: any) => <div data-testid="icon-calendar" {...props} />,
-  Flame: (props: any) => <div data-testid="icon-flame" {...props} />,
+  Play: (props: Record<string, unknown>) => <div data-testid="icon-play" {...props} />,
+  Pause: (props: Record<string, unknown>) => <div data-testid="icon-pause" {...props} />,
+  RotateCcw: (props: Record<string, unknown>) => <div data-testid="icon-rotate" {...props} />,
+  Calendar: (props: Record<string, unknown>) => <div data-testid="icon-calendar" {...props} />,
+  Flame: (props: Record<string, unknown>) => <div data-testid="icon-flame" {...props} />,
 }));
 
 const mockActivity = [

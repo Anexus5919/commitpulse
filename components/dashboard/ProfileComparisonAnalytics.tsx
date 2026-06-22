@@ -255,11 +255,10 @@ export default function ProfileComparisonAnalytics({
     if (!Array.isArray(repos)) return [];
     return repos
       .map((repo) => {
-        // Resolve keys
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const commits = (repo as any).commits ?? (repo as any).commitCount ?? 0;
-        const stars = repo.stargazerCount ?? (repo as any).stars ?? 0;
-        const forks = repo.forkCount ?? (repo as any).forks ?? 0;
+        const repoObj = repo as unknown as Record<string, unknown>;
+        const commits = (repoObj.commits ?? repoObj.commitCount ?? 0) as number;
+        const stars = repo.stargazerCount ?? ((repoObj.stars ?? 0) as number);
+        const forks = repo.forkCount ?? ((repoObj.forks ?? 0) as number);
 
         // Impact Score: (commits * 3) + (stars * 5) + (forks * 10)
         const score = commits * 3 + stars * 5 + forks * 10;
